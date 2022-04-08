@@ -80,6 +80,14 @@ function HBFS(){
         "After-2",
         "Work-is-2",
         "Over-2",
+        "More-than-3",
+        "Hour-3",
+        "Our-3",
+        "Never-3",
+        "Ever-3",
+        "After-3",
+        "Work-is-3",
+        "Over-3",
     ];
 
     for(var i = 0; i < sounds.length; i++){
@@ -130,20 +138,28 @@ function HBFS(){
         stronger_2: soundSet.directory + "stronger-2.mp3",
         more_than: soundSet.directory + "more-than.mp3",
         more_than_2: soundSet.directory + "more-than-2.mp3",
+        more_than_3: soundSet.directory + "more-than-3.mp3",
         hour: soundSet.directory + "hour.mp3",
         hour_2: soundSet.directory + "hour-2.mp3",
+        hour_3: soundSet.directory + "hour-3.mp3",
         our: soundSet.directory + "our.mp3",
         our_2: soundSet.directory + "our-2.mp3",
+        our_3: soundSet.directory + "our-3.mp3",
         never: soundSet.directory + "never.mp3",
         never_2: soundSet.directory + "never-2.mp3",
+        never_3: soundSet.directory + "never-3.mp3",
         ever: soundSet.directory + "ever.mp3",
         ever_2: soundSet.directory + "ever-2.mp3",
+        ever_3: soundSet.directory + "ever-3.mp3",
         after: soundSet.directory + "after.mp3",
         after_2: soundSet.directory + "after-2.mp3",
+        after_3: soundSet.directory + "after-3.mp3",
         work_is: soundSet.directory + "work-is.mp3",
         work_is_2: soundSet.directory + "work-is-2.mp3",
+        work_is_3: soundSet.directory + "work-is-3.mp3",
         over: soundSet.directory + "over.mp3",
         over_2: soundSet.directory + "over-2.mp3",
+        over_3: soundSet.directory + "over-3.mp3",
     }).toDestination();
 
     instPlayer = new Tone.Buffer("" + soundSet.directory + "instrumental.mp3", function () {
