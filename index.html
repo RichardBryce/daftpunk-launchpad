@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daft Punk Jamming</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="main">
+        <div class="intro">
+            <p>Press any key to continue</p>
+        </div>
+        <div class="soundboard-container">
+            <div class="info">
+                <div class="cover"></div>
+                <h1 class="title"></h1>
+            </div>
+            <div class="soundboard"></div>
+            <div class="function">
+                <div class="buttons">
+                    <button class="toggle" type="button" disabled></button>
+                    <button class="stop" type="button" disabled></button>
+                </div>
+                <div class="sections">
+                    <button class="section-button on" type="button"><span>1</span></button>
+                    <button class="section-button" type="button"><span>2</span></button>
+                    <button class="section-button" type="button"><span>3</span></button>
+                </div>
+            </div>
+        </div>
+        <div class="background-container">
+            <span class="background"></span>
+        </div>
+    </main>
+    <script src="https://unpkg.com/tone@14.7.58/build/Tone.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
