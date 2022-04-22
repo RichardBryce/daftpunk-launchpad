@@ -8,7 +8,6 @@ const functionStop = MAIN.querySelector('.function .stop');
 const functionSection = MAIN.querySelectorAll('.section-button');
 const intro = MAIN.querySelector('.intro');
 
-let init = false;
 let colorSet = {
     index: 0,
     loop: true,
@@ -29,68 +28,24 @@ let iconSet = {
 
 // Initialize Soundboard
 function initialize(){
-    if(!init){
-        HBFS();
-    
-        intro.remove();
-    
-        Tone.Master.volume.value = soundSet.volum;
-        
-        functionToggle.innerHTML = iconSet.play;
-        functionToggle.classList.add('paused');
-        functionStop.innerHTML = iconSet.stop;
+    HBFS();
 
-        init = true;
-    }else{
-        return;
-    }
+    intro.remove();
+
+    Tone.Master.volume.value = soundSet.volum;
+    
+    functionToggle.innerHTML = iconSet.play;
+    functionToggle.classList.add('paused');
+    functionStop.innerHTML = iconSet.stop;
+
+    window.removeEventListener('keydown', initialize);
 }
 
 function HBFS(){
-    var sounds = [
-        "Work-it", 
-        "Make-it", 
-        "Do-it", 
-        "Makes-us", 
-        "Harder", 
-        "Better", 
-        "Faster", 
-        "Stronger", 
-        "More-than", 
-        "Hour", 
-        "Our", 
-        "Never", 
-        "Ever", 
-        "After", 
-        "Work-is", 
-        "Over",
-        "Work-it-2",
-        "Make-it-2",
-        "Do-it-2",
-        "Makes-us-2",
-        "Harder-2",
-        "Better-2",
-        "Faster-2",
-        "Stronger-2",
-        "More-than-2",
-        "Hour-2",
-        "Our-2",
-        "Never-2",
-        "Ever-2",
-        "After-2",
-        "Work-is-2",
-        "Over-2",
-        "More-than-3",
-        "Hour-3",
-        "Our-3",
-        "Never-3",
-        "Ever-3",
-        "After-3",
-        "Work-is-3",
-        "Over-3",
-    ];
+    var sounds = ["Instrumental", "Work-it",  "Make-it",  "Do-it",  "Makes-us",  "Harder",  "Better",  "Faster",  "Stronger",  "More-than",  "Hour",  "Our",  "Never",  "Ever",  "After",  "Work-is",  "Over", "Work-it-2", "Make-it-2", "Do-it-2", "Makes-us-2", "Harder-2", "Better-2", "Faster-2", "Stronger-2", "More-than-2", "Hour-2", "Our-2", "Never-2", "Ever-2", "After-2", "Work-is-2", "Over-2", "More-than-3", "Hour-3", "Our-3", "Never-3", "Ever-3", "After-3", "Work-is-3", "Over-3"];
+    var bucket = {};
 
-    for(var i = 0; i < sounds.length; i++){
+    for(var i = 1; i < sounds.length; i++){
         var jam = document.createElement("div");
 
         if(colorSet.loop === true && i === (colorSet.color.length * 2)){
@@ -118,49 +73,11 @@ function HBFS(){
     cover.style.backgroundImage = soundSet.cover;
     background.style.backgroundImage = soundSet.cover;
 
-    multiPlayer = new Tone.Players({
-        instrumental: soundSet.directory + "instrumental.mp3",
-        work_it: soundSet.directory + "work-it.mp3",
-        work_it_2: soundSet.directory + "work-it-2.mp3",
-        make_it: soundSet.directory + "make-it.mp3",
-        make_it_2: soundSet.directory + "make-it-2.mp3",
-        do_it: soundSet.directory + "do-it.mp3",
-        do_it_2: soundSet.directory + "do-it-2.mp3",
-        makes_us: soundSet.directory + "makes-us.mp3",
-        makes_us_2: soundSet.directory + "makes-us-2.mp3",
-        harder: soundSet.directory + "harder.mp3",
-        harder_2: soundSet.directory + "harder-2.mp3",
-        better: soundSet.directory + "better.mp3",
-        better_2: soundSet.directory + "better-2.mp3",
-        faster: soundSet.directory + "faster.mp3",
-        faster_2: soundSet.directory + "faster-2.mp3",
-        stronger: soundSet.directory + "stronger.mp3",
-        stronger_2: soundSet.directory + "stronger-2.mp3",
-        more_than: soundSet.directory + "more-than.mp3",
-        more_than_2: soundSet.directory + "more-than-2.mp3",
-        more_than_3: soundSet.directory + "more-than-3.mp3",
-        hour: soundSet.directory + "hour.mp3",
-        hour_2: soundSet.directory + "hour-2.mp3",
-        hour_3: soundSet.directory + "hour-3.mp3",
-        our: soundSet.directory + "our.mp3",
-        our_2: soundSet.directory + "our-2.mp3",
-        our_3: soundSet.directory + "our-3.mp3",
-        never: soundSet.directory + "never.mp3",
-        never_2: soundSet.directory + "never-2.mp3",
-        never_3: soundSet.directory + "never-3.mp3",
-        ever: soundSet.directory + "ever.mp3",
-        ever_2: soundSet.directory + "ever-2.mp3",
-        ever_3: soundSet.directory + "ever-3.mp3",
-        after: soundSet.directory + "after.mp3",
-        after_2: soundSet.directory + "after-2.mp3",
-        after_3: soundSet.directory + "after-3.mp3",
-        work_is: soundSet.directory + "work-is.mp3",
-        work_is_2: soundSet.directory + "work-is-2.mp3",
-        work_is_3: soundSet.directory + "work-is-3.mp3",
-        over: soundSet.directory + "over.mp3",
-        over_2: soundSet.directory + "over-2.mp3",
-        over_3: soundSet.directory + "over-3.mp3",
-    }).toDestination();
+    for(var i = 0; i < sounds.length; i++){
+        bucket["" + sounds[i].replaceAll("-", "_").toLowerCase() + ""] = soundSet.directory + sounds[i].toLowerCase() + ".mp3";
+    }
+
+    multiPlayer = new Tone.Players(bucket).toDestination();
 
     instPlayer = new Tone.Buffer("" + soundSet.directory + "instrumental.mp3", function () {
         //the buffer is now available.
@@ -170,14 +87,14 @@ function HBFS(){
         functionStop.removeAttribute("disabled");
     });
 
-    soundSet.button.forEach(n => n.addEventListener('mousedown', function(){
+    soundSet.button.forEach(n => n.addEventListener("mousedown", function(){
         playJam(n);
     }));
 }
 
 // Play Soundboard Jamming
 function playJam(e){
-    let jam = e.getAttribute('data-jam').replaceAll('-', '_').toLowerCase();
+    let jam = e.getAttribute("data-jam").replaceAll("-", "_").toLowerCase();
     multiPlayer.player("" + jam + "").start();
 }
 
@@ -221,9 +138,7 @@ function playFunction(func, el){
 }
 
 // Press any key to continue
-window.addEventListener('keydown', function(){
-    initialize();
-});
+window.addEventListener('keydown', initialize);
 
 // Click Function
 functionToggle.addEventListener("click", function(){
