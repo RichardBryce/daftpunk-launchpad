@@ -16,7 +16,7 @@ let colorSet = {
 let soundSet = {
     directory: "",
     cover: "",
-    title: "",
+    title: "", 
     button: [],
     volum: -5
 };
@@ -27,13 +27,13 @@ let iconSet = {
 };
 
 // Initialize Soundboard
-function initialize() {
+function initialize(){
     HBFS();
 
     intro.remove();
 
     Tone.Master.volume.value = soundSet.volum;
-
+    
     functionToggle.innerHTML = iconSet.play;
     functionToggle.classList.add('paused');
     functionStop.innerHTML = iconSet.stop;
@@ -41,14 +41,14 @@ function initialize() {
     window.removeEventListener('keydown', initialize);
 }
 
-function HBFS() {
-    var sounds = ["Instrumental", "Work-it", "Make-it", "Do-it", "Makes-us", "Harder", "Better", "Faster", "Stronger", "More-than", "Hour", "Our", "Never", "Ever", "After", "Work-is", "Over", "Work-it-2", "Make-it-2", "Do-it-2", "Makes-us-2", "Harder-2", "Better-2", "Faster-2", "Stronger-2", "More-than-2", "Hour-2", "Our-2", "Never-2", "Ever-2", "After-2", "Work-is-2", "Over-2", "More-than-3", "Hour-3", "Our-3", "Never-3", "Ever-3", "After-3", "Work-is-3", "Over-3"];
+function HBFS(){
+    var sounds = ["Instrumental", "Work-it",  "Make-it",  "Do-it",  "Makes-us",  "Harder",  "Better",  "Faster",  "Stronger",  "More-than",  "Hour",  "Our",  "Never",  "Ever",  "After",  "Work-is",  "Over", "Work-it-2", "Make-it-2", "Do-it-2", "Makes-us-2", "Harder-2", "Better-2", "Faster-2", "Stronger-2", "More-than-2", "Hour-2", "Our-2", "Never-2", "Ever-2", "After-2", "Work-is-2", "Over-2", "More-than-3", "Hour-3", "Our-3", "Never-3", "Ever-3", "After-3", "Work-is-3", "Over-3"];
     var bucket = {};
 
-    for (var i = 1; i < sounds.length; i++) {
+    for(var i = 1; i < sounds.length; i++){
         var jam = document.createElement("div");
 
-        if (colorSet.loop === true && i === (colorSet.color.length * 2)) {
+        if(colorSet.loop === true && i === (colorSet.color.length * 2)){
             colorSet.index = 0;
             colorSet.loop = false;
         }
@@ -59,9 +59,9 @@ function HBFS() {
         jam.setAttribute("role", "button");
         jam.setAttribute("tabindex", "0");
         jam.innerHTML = sounds[i];
-
+        
         soundboard.appendChild(jam);
-
+        
         colorSet.index++;
     }
 
@@ -73,7 +73,7 @@ function HBFS() {
     cover.style.backgroundImage = soundSet.cover;
     background.style.backgroundImage = soundSet.cover;
 
-    for (var i = 0; i < sounds.length; i++) {
+    for(var i = 0; i < sounds.length; i++){
         bucket["" + sounds[i].replaceAll("-", "_").toLowerCase() + ""] = soundSet.directory + sounds[i].toLowerCase() + ".mp3";
     }
 
@@ -87,22 +87,22 @@ function HBFS() {
         functionStop.removeAttribute("disabled");
     });
 
-    soundSet.button.forEach(n => n.addEventListener("mousedown", function () {
+    soundSet.button.forEach(n => n.addEventListener("mousedown", function(){
         playJam(n);
     }));
 }
 
 // Play Soundboard Jamming
-function playJam(e) {
+function playJam(e){
     let jam = e.getAttribute("data-jam").replaceAll("-", "_").toLowerCase();
     multiPlayer.player("" + jam + "").start();
 }
 
 // Play Instrumental
-function playFunction(func, el) {
+function playFunction(func, el){
     let f = [0, "played", "paused", "stopped"];
 
-    switch (func) {
+    switch(func){
         case "toggle":
             if (el.classList.contains("paused") || el.classList.contains("stopped")) {
                 // toggle played
@@ -112,26 +112,26 @@ function playFunction(func, el) {
                 // toggle paused
                 f[0] = 2;
             }
-            break;
+        break;
 
         case "stop":
             // stopped
             f[0] = 3;
             multiPlayer.player("instrumental").stop();
-            break;
+        break;
 
         default:
             console.log("empty button");
     }
 
-    for (let i = 1; i < f.length; i++) {
+    for(let i = 1; i < f.length; i++){
         functionToggle.classList.remove(f[i]);
-        if (f[0] === i) {
+        if(f[0] === i){
             functionToggle.classList.add(f[i]);
         }
-        if (f[0] < 2) {
+        if(f[0] < 2){ 
             functionToggle.innerHTML = iconSet.pause;
-        } else {
+        }else{
             functionToggle.innerHTML = iconSet.play;
         }
     }
@@ -141,15 +141,15 @@ function playFunction(func, el) {
 window.addEventListener('keydown', initialize);
 
 // Click Function
-functionToggle.addEventListener("click", function () {
+functionToggle.addEventListener("click", function(){
     playFunction("toggle", this);
 });
-functionStop.addEventListener("click", function () {
+functionStop.addEventListener("click", function(){
     playFunction("stop", this);
 });
 
 // Click Section
-functionSection.forEach(n => n.addEventListener("click", function () {
+functionSection.forEach(n => n.addEventListener("click", function(){
     functionSection.forEach(n => n.classList.remove("on"));
     n.classList.add("on");
 }));
