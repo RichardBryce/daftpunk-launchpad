@@ -3,8 +3,8 @@ const soundboard = MAIN.querySelector(".soundboard");
 const background = MAIN.querySelector(".background");
 const title = MAIN.querySelector(".title");
 const cover = MAIN.querySelector(".cover");
-const functionButtons = MAIN.querySelectorAll('[data-function]');
-const intro = MAIN.querySelector('.intro');
+const functionButtons = MAIN.querySelectorAll("[data-function]");
+const intro = MAIN.querySelector(".intro");
 
 let colorSet = {
     index: 0,
@@ -27,9 +27,9 @@ let iconSet = {
 };
 
 // Press any key to continue
-window.addEventListener('keydown', initialize);
+window.addEventListener("keydown", initialize);
 
-// Click Function
+// Function buttons Click
 functionButtons.forEach(n => n.addEventListener("click", playFunction));
 
 // Initialize Soundboard
@@ -40,11 +40,16 @@ function initialize() {
 
     Tone.Master.volume.value = soundSet.volum;
     
-    functionButtons[0].classList.add('paused');
+    functionButtons[0].classList.add("paused");
     functionButtons[0].innerHTML = iconSet.play;
     functionButtons[1].innerHTML = iconSet.stop;
 
-    window.removeEventListener('keydown', initialize);
+
+    // Press Key to Jamming
+    window.addEventListener("keydown", pressKey);
+
+    // End Initialize
+    window.removeEventListener("keydown", initialize);
 }
 
 function HBFS() {
@@ -70,7 +75,7 @@ function HBFS() {
     multiPlayer = new Tone.Players(bucket).toDestination();
     multiPlayer.context.lookAhead = 0;
     instPlayer = new Tone.Buffer(bucket["instrumental"], function(){
-        console.log('instrumental loaded');
+        console.log("instrumental loaded");
         multiPlayer.player("instrumental").sync().start(0);
         functionButtons.forEach(n => {  // instrumental is now available.
             n.removeAttribute("disabled");
@@ -183,16 +188,16 @@ function changeJam(section){
 }
 
 // Play Jamming
-function playJam() {
-    let j = convertName(this.getAttribute("data-jam"), 1, 1);
-    multiPlayer.player("" + j + "").start();
+function playJam(e){
+    let jam = e.target === undefined ? e : this;
+    multiPlayer.player("" + convertName(jam.getAttribute("data-jam"), 1, 1) + "").start();
 }
 
 // Play Instrumental
 function playFunction() {
     let f = [0, "played", "paused", "stopped"];
 
-    switch (this.getAttribute('data-function')) {
+    switch (this.getAttribute("data-function")) {
         case "toggle":
             if (this.classList.contains("paused") || this.classList.contains("stopped")){
                 f[0] = 1; // played
@@ -221,6 +226,18 @@ function playFunction() {
             functionButtons[0].innerHTML = iconSet.pause;
         } else {
             functionButtons[0].innerHTML = iconSet.play;
+        }
+    }
+}
+
+// Pressed Keyboard
+function pressKey(e){
+    const shortcut = ["3", "4", "5", "6", "e", "r", "t", "y", "d", "f", "g", "h", "c", "v", "b", "n"];
+    const key = e.key !== undefined ? e.key : e.keyCode;
+
+    for(var i = 0; i < shortcut.length; i++){
+        if(key === shortcut[i]){
+            playJam(soundSet.buttons[i]);
         }
     }
 }
