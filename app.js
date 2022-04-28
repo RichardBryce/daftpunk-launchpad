@@ -68,6 +68,7 @@ function HBFS() {
     makeJam(1, 16);
 
     multiPlayer = new Tone.Players(bucket).toDestination();
+    multiPlayer.context.lookAhead = 0;
     instPlayer = new Tone.Buffer(bucket["instrumental"], function(){
         console.log('instrumental loaded');
         multiPlayer.player("instrumental").sync().start(0);
@@ -170,7 +171,7 @@ function changeJam(section){
             console.log("Empty Section");
     }
     for(var i = 0; i < soundSet.buttons.length; i++){
-        if(i < anchor[1] || (anchor[1] > 1 && i === anchor[1])){
+        if((anchor[1] > 1 && i === anchor[1]) || i < anchor[1]){
             soundSet.buttons[i].classList.add("disabled");
             soundSet.buttons[i].setAttribute("tabindex", "-1");
         }else{
