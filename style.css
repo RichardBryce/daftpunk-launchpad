@@ -109,7 +109,7 @@ button{
     flex-wrap: wrap;
     margin: 10px -2px;
 }
-.soundboard-container .soundboard .jam{
+.soundboard-container .soundboard [data-jam]{
     flex: 0 0 calc(25% - 4px);
     display: inline-flex;
     align-items: center;
@@ -122,11 +122,16 @@ button{
     font-size: 18px;
     text-shadow: 0px 0px 1px rgba(0, 0, 0, .2),
                  0px 0px 2px rgba(0, 0, 0, .2);
-    transition: background-color ease .1s;
+    transition: background-color ease .1s,
+                opacity ease .3s;
     backdrop-filter: blur(10px);
 }
-.soundboard-container .soundboard .jam:hover{
+.soundboard-container .soundboard [data-jam]:hover{
     opacity: 1;
+}
+.soundboard-container .soundboard [data-jam].disabled{
+    pointer-events: none;
+    opacity: 0.5;
 }
 .soundboard-container .function{
     display: flex;
