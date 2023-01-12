@@ -9,7 +9,7 @@ html{
     font-family: "Poppins", sans-serif;
     color: #ffffff;
     letter-spacing: -0.02em;
-    background: #000000;
+    background: #111111;
     box-sizing: border-box;
     user-select: none;
 }
@@ -36,25 +36,25 @@ button{
 [role="button"]:active{
     border-color: rgba(24, 24, 24, .4);
 }
-[data-jam-color="red"]:active{
+[data-button-color="red"]:active{
     background-color: rgba(223, 43, 43, 0.6);
 }
-[data-jam-color="pink"]:active{
+[data-button-color="pink"]:active{
     background-color: #df2bb2;
 }
-[data-jam-color="blue"]:active{
+[data-button-color="blue"]:active{
     background-color: #2b4cdf;
 }
-[data-jam-color="ice"]:active{
+[data-button-color="ice"]:active{
     background-color: #10bdbd;
 }
-[data-jam-color="green"]:active{
+[data-button-color="green"]:active{
     background-color: #22ce3f;
 }
-[data-jam-color="yellow"]:active{
+[data-button-color="yellow"]:active{
     background-color: #bdc000;
 }
-[data-jam-color="orange"]:active{
+[data-button-color="orange"]:active{
     background-color: #df642b;
 }
 .intro{
@@ -109,7 +109,7 @@ button{
     flex-wrap: wrap;
     margin: 10px -2px;
 }
-.soundboard-container .soundboard [data-jam]{
+.soundboard-container .soundboard [data-button]{
     flex: 0 0 calc(25% - 4px);
     display: inline-flex;
     align-items: center;
@@ -126,10 +126,10 @@ button{
                 opacity ease .3s;
     backdrop-filter: blur(10px);
 }
-.soundboard-container .soundboard [data-jam]:hover{
+.soundboard-container .soundboard [data-button]:hover{
     opacity: 1;
 }
-.soundboard-container .soundboard [data-jam].disabled{
+.soundboard-container .soundboard [data-button].disabled{
     pointer-events: none;
     opacity: 0.5;
 }

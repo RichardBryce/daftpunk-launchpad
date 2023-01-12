@@ -9,7 +9,7 @@ const intro = MAIN.querySelector(".intro");
 let colorSet = {
     index: 0,
     loop: true,
-    color: ["red", "pink", "blue", "ice", "green", "yellow", "orange"],
+    color: ["red", "pink", "blue", "ice", "green", "yellow", "orange"]
 };
 let soundSet = {
     title: "",
@@ -18,7 +18,7 @@ let soundSet = {
     audio: [],
     buttons: [],
     currentSection: 1,
-    volum: -10,
+    volum: -10
 };
 let iconSet = {
     play: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="currentColor"><path d="M24,4.8A19.2,19.2,0,1,0,43.2,24,19.19,19.19,0,0,0,24,4.8Zm0,34.8A15.6,15.6,0,1,1,39.6,24,15.63,15.63,0,0,1,24,39.6Z"/><polygon points="19.2 32.4 32.4 24 19.2 15.6 19.2 32.4"/></svg>',
@@ -29,30 +29,38 @@ let iconSet = {
 // Press any key to continue
 window.addEventListener("keydown", initialize);
 
-// Function buttons Click
-functionButtons.forEach(n => n.addEventListener("click", playFunction));
-
 // Initialize Soundboard
-function initialize() {
-    HBFS();
-
-    intro.remove();
-
+function initialize(e) {
+    // Tone Preset
     Tone.Master.volume.value = soundSet.volum;
+    Tone.context.lookAhead = 0;
+
+    // Function buttons
+    functionButtons.forEach(n => n.addEventListener("click", playFunction));
+
+    // Press letter, number, enter and space key to continue
+    if(e.which >= 48 && e.which <= 57 || e.which >= 65 && e.which <= 90 || e.which === 13 || e.which === 32) {
+        // Playing musical instruments
+        HBFS();
     
-    functionButtons[0].classList.add("paused");
-    functionButtons[0].innerHTML = iconSet.play;
-    functionButtons[1].innerHTML = iconSet.stop;
-
-
-    // Press Key to Jamming
-    window.addEventListener("keydown", pressKey);
-
-    // End Initialize
-    window.removeEventListener("keydown", initialize);
+        // Quit intro display
+        intro.remove();
+        
+        functionButtons[0].classList.add("paused");
+        functionButtons[0].innerHTML = iconSet.play;
+        functionButtons[1].innerHTML = iconSet.stop;
+    
+    
+        // Press key to launchpad
+        window.addEventListener("keydown", pressKey);
+    
+        // Finish initialize
+        window.removeEventListener("keydown", initialize);
+    }
 }
 
-function HBFS() {
+// Harder, Better, Faster, Stronger
+function HBFS(){
     var bucket = {};
 
     soundSet.audio = ["Instrumental", "Work-it", "Make-it", "Do-it", "Makes-us", "Harder", "Better", "Faster", "Stronger", "More-than", "Hour", "Our", "Never", "Ever", "After", "Work-is", "Over", "Work-it-2", "Make-it-2", "Do-it-2", "Makes-us-2", "Harder-2", "Better-2", "Faster-2", "Stronger-2", "More-than-2", "Hour-2", "Our-2", "Never-2", "Ever-2", "After-2", "Work-is-2", "Over-2", "More-than-3", "Hour-3", "Our-3", "Never-3", "Ever-3", "After-3", "Work-is-3", "Over-3"];
@@ -64,34 +72,45 @@ function HBFS() {
     cover.style.backgroundImage = soundSet.cover;
     background.style.backgroundImage = soundSet.cover;
 
-    for (var i = 0; i < soundSet.audio.length; i++){
+    // Gathering all sounds into bucket
+    for(var i = 0; i < soundSet.audio.length; i++){
         bucket["" + convertName(soundSet.audio[i], 1, 1) + ""] = soundSet.directory + convertName(soundSet.audio[i], 0, 1) + ".mp3";
     }
 
+    // Initialize Board Sections
     initSection(3);
 
-    makeJam(1, 16);
+    // Create Launchpad Buttons
+    makeLaunchpad(1, 16);
 
-    multiPlayer = new Tone.Players(bucket).toDestination();
-    multiPlayer.context.lookAhead = 0;
-    instPlayer = new Tone.Buffer(bucket["instrumental"], function(){
-        console.log("instrumental loaded");
-        multiPlayer.player("instrumental").sync().start(0);
-        functionButtons.forEach(n => {  // instrumental is now available.
-            n.removeAttribute("disabled");
-        });
-    });
+    // Player Stanby
+    initPlayer(bucket);
 }
 
-// Converting Name
-function convertName(name, under, lower){
-    if(under === 1){
+// Converting Name: hypen to underline or to lowercase or both
+function convertName(name, underline, lowercase){
+    if(underline === 1){
         name = name.replaceAll("-", "_");
     }
-    if(lower === 1){
+    if(lowercase === 1){
         name = name.toLowerCase();
     }
     return name;
+}
+
+// initialize Player
+function initPlayer(bucket){
+    multiPlayer = new Tone.Players(bucket).toDestination();
+    instPlayer = new Tone.Buffer(bucket["instrumental"], function(){
+        // instrumental is now available.
+        console.log("instrumental loaded");
+
+        multiPlayer.player("instrumental").sync().start(0);
+
+        functionButtons.forEach(n => {
+            n.removeAttribute("disabled");
+        });
+    });
 }
 
 // initialize Section
@@ -128,38 +147,38 @@ function changeSection(){
 
         soundSet.currentSection = order;
         
-        changeJam(order);
+        changeLaunchpad(order);
     }
 }
 
-// Making Jam
-function makeJam(start, end){
+// Making Launchpad
+function makeLaunchpad(start, end){
     for(var i = start; i <= end; i++){
-        var jam = document.createElement("div");
+        var button = document.createElement("div");
 
         if(colorSet.loop === true && i === (colorSet.color.length * 2)){
             colorSet.index = 0;
             colorSet.loop = false;
         }
 
-        jam.innerHTML = soundSet.audio[i];
-        jam.setAttribute("data-jam", soundSet.audio[i]);
-        jam.setAttribute("data-jam-color", colorSet.color[Math.floor(colorSet.index / 2)]);
-        jam.setAttribute("role", "button");
-        jam.setAttribute("tabindex", "0");
-        jam.addEventListener("mousedown", playJam);
+        button.innerHTML = soundSet.audio[i];
+        button.setAttribute("data-button", soundSet.audio[i]);
+        button.setAttribute("data-button-color", colorSet.color[Math.floor(colorSet.index / 2)]);
+        button.setAttribute("role", "button");
+        button.setAttribute("tabindex", "0");
+        button.addEventListener("mousedown", playLaunchpad);
         
-        soundboard.appendChild(jam);
+        soundboard.appendChild(button);
         
-        soundSet.buttons.push(jam);
+        soundSet.buttons.push(button);
         colorSet.index++;
     }
 }
 
-// Changing Jam
-function changeJam(section){
-    // Anchor = [Audio Array Start, Jam Button Position]
-    // Jam Button Position > 0 : 0 ~ Position is Disabled
+// Changing Launchpad
+function changeLaunchpad(section){
+    // Anchor = [Audio start position in array, button start position in soundboard]
+    // Launchpad button position > 0: 0 ~ Position is disabled
     var anchor = [0, 0];
 
     switch(section){
@@ -182,34 +201,37 @@ function changeJam(section){
         }else{
             soundSet.buttons[i].classList.remove("disabled");
             soundSet.buttons[i].setAttribute("tabindex", "0");
-            soundSet.buttons[i].setAttribute("data-jam", soundSet.audio[i + anchor[0] - anchor[1]]);
+            soundSet.buttons[i].setAttribute("data-button", soundSet.audio[i + anchor[0] - anchor[1]]);
         }
     }
 }
 
-// Play Jamming
-function playJam(e){
-    let jam = e.target === undefined ? e : this;
-    multiPlayer.player("" + convertName(jam.getAttribute("data-jam"), 1, 1) + "").start();
+// Play launchpad
+function playLaunchpad(e){
+    let button = e.target === undefined ? e : this;
+    multiPlayer.player("" + convertName(button.getAttribute("data-button"), 1, 1) + "").start();
+
+    // Play button animation
 }
 
 // Play Instrumental
-function playFunction() {
+function playFunction(){
+    // f[0] = 1: Played, f[0] = 2: paused, f[0] = 3: Stopped
     let f = [0, "played", "paused", "stopped"];
 
-    switch (this.getAttribute("data-function")) {
+    switch(this.getAttribute("data-function")){
         case "toggle":
-            if (this.classList.contains("paused") || this.classList.contains("stopped")){
-                f[0] = 1; // played
+            if(this.classList.contains("paused") || this.classList.contains("stopped")){
+                f[0] = 1;
                 Tone.Transport.start();
-            } else {
-                f[0] = 2; // paused
+            }else{
+                f[0] = 2;
                 Tone.Transport.pause();
             }
             break;
 
         case "stop":
-            f[0] = 3; // stopped
+            f[0] = 3;
             Tone.Transport.stop();
             break;
 
@@ -217,14 +239,14 @@ function playFunction() {
             console.log("empty button");
     }
 
-    for (let i = 1; i < f.length; i++) {
+    for(let i = 1; i < f.length; i++){
         functionButtons[0].classList.remove(f[i]);
-        if (f[0] === i) {
+        if(f[0] === i){
             functionButtons[0].classList.add(f[i]);
         }
-        if (f[0] < 2) {
+        if(f[0] < 2){
             functionButtons[0].innerHTML = iconSet.pause;
-        } else {
+        }else{
             functionButtons[0].innerHTML = iconSet.play;
         }
     }
@@ -232,12 +254,21 @@ function playFunction() {
 
 // Pressed Keyboard
 function pressKey(e){
+    // keyboard layout for 4x4
     const shortcut = ["3", "4", "5", "6", "e", "r", "t", "y", "d", "f", "g", "h", "c", "v", "b", "n"];
-    const key = e.key !== undefined ? e.key : e.keyCode;
+    const key = e.key;
 
     for(var i = 0; i < shortcut.length; i++){
         if(key === shortcut[i]){
-            playJam(soundSet.buttons[i]);
+            playLaunchpad(soundSet.buttons[i]);
+        }
+    }
+
+    // For accessibility
+    if((key === 'Enter' || key === 13) || (['Spacebar', ' '].indexOf(key) >= 0 || key === 32)){
+        if(e.target.getAttribute('data-button')){
+            e.preventDefault();
+            playLaunchpad(e.target);
         }
     }
 }
